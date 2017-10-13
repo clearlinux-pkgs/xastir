@@ -5,10 +5,6 @@ Configure miss: /usr/bin/convert.exe
 Configure miss: festival
 Configure miss: gpsman
 Configure miss: xfontsel
-Configure miss: curl/curl.h usability
-Configure miss: curl/curl.h presence
-Configure miss: curl/curl.h
-Configure miss: wget
 Configure miss: main in -lcompat
 Configure miss: gettext in -lintl
 Configure miss: pj_init in -lproj
@@ -26,5 +22,4 @@ Configure miss: gdal-config
 Configure miss: gdal.h usability
 Configure miss: gdal.h presence
 Configure miss: gdal.h
-Configure miss: if db.h is exists and is usable
 Configure miss: GraphicsMagick-config

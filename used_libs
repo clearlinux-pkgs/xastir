@@ -3,6 +3,8 @@ libXm.so.4
 libXpm.so.4
 libXt.so.6
 libc.so.6
+libcurl.so.4
+libdb-5.3.so
 libgcc_s.so.1
 libm.so.6
 libpcre.so.1
