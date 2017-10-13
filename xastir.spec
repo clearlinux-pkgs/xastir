@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 208
-Release  : 2
+Release  : 3
 URL      : https://github.com/Xastir/Xastir/archive/xastir208.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/xastir208.tar.gz
 Summary  : No detailed summary available
@@ -13,6 +13,8 @@ License  : GPL-2.0 LGPL-2.0
 Requires: xastir-bin
 Requires: xastir-doc
 Requires: xastir-data
+Requires: font-adobe-100dpi
+Requires: font-adobe-75dpi
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : curl-dev
@@ -72,7 +74,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1507855485
+export SOURCE_DATE_EPOCH=1507922016
 %reconfigure --disable-static --without-imagemagick
 make V=1  %{?_smp_mflags}
 
@@ -84,7 +86,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1507855485
+export SOURCE_DATE_EPOCH=1507922016
 rm -rf %{buildroot}
 %make_install
 
