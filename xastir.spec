@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 208
-Release  : 4
+Release  : 5
 URL      : https://github.com/Xastir/Xastir/archive/xastir208.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/xastir208.tar.gz
 Summary  : No detailed summary available
