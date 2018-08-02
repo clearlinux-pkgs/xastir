@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.0
-Release  : 7
+Release  : 8
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Summary  : No detailed summary available
@@ -16,16 +16,24 @@ Requires: xastir-man
 Requires: xastir-data
 Requires: font-adobe-100dpi
 Requires: font-adobe-75dpi
+BuildRequires : automake
+BuildRequires : automake-dev
 BuildRequires : buildreq-qmake
 BuildRequires : curl-dev
 BuildRequires : db-dev
+BuildRequires : gettext-bin
+BuildRequires : libtool
+BuildRequires : libtool-dev
+BuildRequires : m4
 BuildRequires : motif-dev
 BuildRequires : pcre-dev
+BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(ice)
 BuildRequires : pkgconfig(x11)
 BuildRequires : pkgconfig(xext)
 BuildRequires : pkgconfig(xpm)
 BuildRequires : pkgconfig(xt)
+Patch1: 0001-Add-stateless-support-in-var-lib-xastir.patch
 
 %description
 ------------------------------------------------------------------------
@@ -79,14 +87,15 @@ man components for the xastir package.
 
 %prep
 %setup -q -n Xastir-Release-2.1.0
+%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1533169915
-%configure --disable-static --without-imagemagick
+export SOURCE_DATE_EPOCH=1533234476
+%reconfigure --disable-static --without-imagemagick
 make  %{?_smp_mflags}
 
 %check
@@ -97,7 +106,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1533169915
+export SOURCE_DATE_EPOCH=1533234476
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/doc/xastir
 cp COPYING %{buildroot}/usr/share/doc/xastir/COPYING
