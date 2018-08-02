@@ -1,0 +1,7 @@
+2.1.0
+pkgconfig(xext)
+pkgconfig(ice)
+pkgconfig(xpm)
+pkgconfig(x11)
+pkgconfig(xt)
+pcre-dev

@@ -1,4 +1,7 @@
+libICE.so.6
+libSM.so.6
 libX11.so.6
+libXext.so.6
 libXm.so.4
 libXpm.so.4
 libXt.so.6
@@ -9,3 +12,4 @@ libgcc_s.so.1
 libm.so.6
 libpcre.so.1
 libpthread.so.0
+librt.so.1
