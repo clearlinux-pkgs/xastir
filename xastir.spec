@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.0
-Release  : 8
+Release  : 9
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Summary  : No detailed summary available
@@ -14,8 +14,7 @@ Requires: xastir-bin
 Requires: xastir-license
 Requires: xastir-man
 Requires: xastir-data
-Requires: font-adobe-100dpi
-Requires: font-adobe-75dpi
+Requires: xorg-fonts
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : buildreq-qmake
