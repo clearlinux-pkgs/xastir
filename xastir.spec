@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.0
-Release  : 10
+Release  : 11
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Summary  : Full featured APRS Tracking/Information Reporting System
@@ -14,8 +14,6 @@ Requires: xastir-bin = %{version}-%{release}
 Requires: xastir-data = %{version}-%{release}
 Requires: xastir-license = %{version}-%{release}
 Requires: xastir-man = %{version}-%{release}
-Requires: font-adobe-100dpi
-Requires: font-adobe-75dpi
 BuildRequires : ImageMagick
 BuildRequires : automake
 BuildRequires : automake-dev
@@ -97,7 +95,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1551152689
+export SOURCE_DATE_EPOCH=1551153869
 %reconfigure --disable-static --without-imagemagick
 make  %{?_smp_mflags}
 
@@ -109,7 +107,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1551152689
+export SOURCE_DATE_EPOCH=1551153869
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp COPYING %{buildroot}/usr/share/package-licenses/xastir/COPYING
