@@ -4,22 +4,23 @@
 #
 Name     : xastir
 Version  : 2.1.0
-Release  : 9
+Release  : 10
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.0.tar.gz
-Summary  : No detailed summary available
+Summary  : Full featured APRS Tracking/Information Reporting System
 Group    : Development/Tools
-License  : GPL-2.0 LGPL-2.0
-Requires: xastir-bin
-Requires: xastir-license
-Requires: xastir-man
-Requires: xastir-data
-Requires: xorg-fonts
+License  : BSD-3-Clause GPL-2.0 HPND ICU IJG JasPer-2.0 LGPL-2.0 Libpng MIT MIT-Opengroup SGI-B-1.1 Sleepycat Zlib
+Requires: xastir-bin = %{version}-%{release}
+Requires: xastir-data = %{version}-%{release}
+Requires: xastir-license = %{version}-%{release}
+Requires: xastir-man = %{version}-%{release}
+Requires: font-adobe-100dpi
+Requires: font-adobe-75dpi
+BuildRequires : ImageMagick
 BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : buildreq-qmake
 BuildRequires : curl-dev
-BuildRequires : db-dev
 BuildRequires : gettext-bin
 BuildRequires : libtool
 BuildRequires : libtool-dev
@@ -35,17 +36,20 @@ BuildRequires : pkgconfig(xt)
 Patch1: 0001-Add-stateless-support-in-var-lib-xastir.patch
 
 %description
-------------------------------------------------------------------------
-Please at least SKIM this document before asking questions. In fact,
-READ IT if you've never successfully set up Xastir before. PLEASE!
-READ IT! If you haven't read this file, and ask for help
+LATEST STATUS:
+--------------
+The File->Exit and Interface->Interface Control portions work. No other
+menu options have been implemented. It will connect to a server and display
+raw packets as they come in, but there are no maps, symbols, etc. There's
+not any packet decoding either. The networking is both IPv4 and IPv6
+compatible. It compiles/runs fine and should be very cross-platform at
+this stage (must be compiled on each one though).
 
 %package bin
 Summary: bin components for the xastir package.
 Group: Binaries
-Requires: xastir-data
-Requires: xastir-license
-Requires: xastir-man
+Requires: xastir-data = %{version}-%{release}
+Requires: xastir-license = %{version}-%{release}
 
 %description bin
 bin components for the xastir package.
@@ -62,7 +66,7 @@ data components for the xastir package.
 %package doc
 Summary: doc components for the xastir package.
 Group: Documentation
-Requires: xastir-man
+Requires: xastir-man = %{version}-%{release}
 
 %description doc
 doc components for the xastir package.
@@ -93,7 +97,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1533234476
+export SOURCE_DATE_EPOCH=1551152689
 %reconfigure --disable-static --without-imagemagick
 make  %{?_smp_mflags}
 
@@ -105,14 +109,16 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1533234476
+export SOURCE_DATE_EPOCH=1551152689
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/usr/share/doc/xastir
-cp COPYING %{buildroot}/usr/share/doc/xastir/COPYING
-cp COPYING.LIB.LESSTIF %{buildroot}/usr/share/doc/xastir/COPYING.LIB.LESSTIF
-cp Davis/COPYING %{buildroot}/usr/share/doc/xastir/Davis_COPYING
-cp LaCrosse/COPYING %{buildroot}/usr/share/doc/xastir/LaCrosse_COPYING
-cp src/shapelib/LICENSE.LGPL %{buildroot}/usr/share/doc/xastir/src_shapelib_LICENSE.LGPL
+mkdir -p %{buildroot}/usr/share/package-licenses/xastir
+cp COPYING %{buildroot}/usr/share/package-licenses/xastir/COPYING
+cp COPYING.LIB.LESSTIF %{buildroot}/usr/share/package-licenses/xastir/COPYING.LIB.LESSTIF
+cp Davis/COPYING %{buildroot}/usr/share/package-licenses/xastir/Davis_COPYING
+cp LICENSE %{buildroot}/usr/share/package-licenses/xastir/LICENSE
+cp LaCrosse/COPYING %{buildroot}/usr/share/package-licenses/xastir/LaCrosse_COPYING
+cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICENSE.geocoder
+cp src/shapelib/LICENSE.LGPL %{buildroot}/usr/share/package-licenses/xastir/src_shapelib_LICENSE.LGPL
 %make_install
 
 %files
@@ -332,16 +338,17 @@ cp src/shapelib/LICENSE.LGPL %{buildroot}/usr/share/doc/xastir/src_shapelib_LICE
 %doc /usr/share/doc/xastir/*
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/xastir/COPYING
-/usr/share/doc/xastir/COPYING.LIB.LESSTIF
-/usr/share/doc/xastir/Davis_COPYING
-/usr/share/doc/xastir/LICENSE
-/usr/share/doc/xastir/LaCrosse_COPYING
-/usr/share/doc/xastir/src_shapelib_LICENSE.LGPL
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/xastir/COPYING
+/usr/share/package-licenses/xastir/COPYING.LIB.LESSTIF
+/usr/share/package-licenses/xastir/Davis_COPYING
+/usr/share/package-licenses/xastir/LICENSE
+/usr/share/package-licenses/xastir/LaCrosse_COPYING
+/usr/share/package-licenses/xastir/src_LICENSE.geocoder
+/usr/share/package-licenses/xastir/src_shapelib_LICENSE.LGPL
 
 %files man
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/man/man1/callpass.1
 /usr/share/man/man1/testdbfawk.1
 /usr/share/man/man1/xastir.1

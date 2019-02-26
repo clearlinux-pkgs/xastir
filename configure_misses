@@ -1,6 +1,5 @@
 Configure miss: gm
 Configure miss: /usr/bin/gm.exe
-Configure miss: convert
 Configure miss: /usr/bin/convert.exe
 Configure miss: festival
 Configure miss: gpsman
@@ -22,4 +21,5 @@ Configure miss: gdal-config
 Configure miss: gdal.h usability
 Configure miss: gdal.h presence
 Configure miss: gdal.h
+Configure miss: if db.h is exists and is usable
 Configure miss: GraphicsMagick-config
