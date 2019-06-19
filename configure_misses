@@ -7,19 +7,6 @@ Configure miss: xfontsel
 Configure miss: main in -lcompat
 Configure miss: gettext in -lintl
 Configure miss: pj_init in -lproj
-Configure miss: shapefil.h usability
-Configure miss: shapefil.h presence
-Configure miss: shapefil.h
-Configure miss: libshp/shapefil.h usability
-Configure miss: libshp/shapefil.h presence
-Configure miss: libshp/shapefil.h
-Configure miss: Xm/XpmI.h usability
-Configure miss: Xm/XpmI.h presence
-Configure miss: Xm/XpmI.h
 Configure miss: ax25_config_load_ports in -lax25
-Configure miss: gdal-config
-Configure miss: gdal.h usability
-Configure miss: gdal.h presence
-Configure miss: gdal.h
 Configure miss: if db.h is exists and is usable
 Configure miss: GraphicsMagick-config

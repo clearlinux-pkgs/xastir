@@ -1,6 +1,6 @@
-From ee6f87ee5bf3bd7c9dc382b84560555b3e92840b Mon Sep 17 00:00:00 2001
+From d36c85d8cbe8e08c50021294098e910c73d36f4a Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
-Date: Thu, 2 Aug 2018 10:10:32 -0700
+Date: Wed, 19 Jun 2019 10:56:00 -0700
 Subject: [PATCH] Add stateless support in /var/lib/xastir
 
 Add search functionality to try, in order:
@@ -12,21 +12,19 @@ Update scripts that fetch public databases to store them under
 /var/lib/xastir
 ---
  configure.ac              |  3 ++-
- scripts/get-BOMdata       |  3 ++-
- scripts/get-NWSdata       |  3 ++-
- scripts/get-fcc-rac.pl    |  3 ++-
- scripts/get-gnis          |  7 ++++---
- scripts/get-pop           | 12 +++++++-----
- scripts/xastir-fixcfg.sh  |  2 +-
- scripts/xastir-migrate.sh |  2 +-
- src/xa_config.c           | 33 ++++++++++++++++++++++++++-------
- 9 files changed, 47 insertions(+), 21 deletions(-)
+ scripts/get-BOMdata.in    |  3 ++-
+ scripts/get-NWSdata.in    |  5 +++--
+ scripts/get-fcc-rac.pl.in |  3 ++-
+ scripts/get-gnis.in       |  7 ++++---
+ scripts/get-pop.in        | 12 +++++++-----
+ src/xa_config.c           | 35 +++++++++++++++++++++++++++--------
+ 7 files changed, 47 insertions(+), 21 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 1ef8e45..b137da0 100644
+index e76adc3..b756b6e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -688,7 +688,8 @@ if test "x${datadir}" = "x"; then
+@@ -661,7 +661,8 @@ if test "x${datadir}" = "x"; then
  else 
    CPPFLAGS="$CPPFLAGS -DXASTIR_DATA_BASE=\\\"${datadir}/xastir\\\""
  fi 
@@ -36,48 +34,57 @@ index 1ef8e45..b137da0 100644
  
  
  # Add a special option that makes Cygwin link much faster (from
-diff --git a/scripts/get-BOMdata b/scripts/get-BOMdata
-index 540046d..e5c66b8 100755
---- a/scripts/get-BOMdata
-+++ b/scripts/get-BOMdata
+diff --git a/scripts/get-BOMdata.in b/scripts/get-BOMdata.in
+index 9605699..d66cff4 100755
+--- a/scripts/get-BOMdata.in
++++ b/scripts/get-BOMdata.in
 @@ -42,7 +42,8 @@ FILE7="LGA08aAust"                   # Local Government Area Boundaries
  
- x=`dirname $0`
- . $x/values
+ prefix=@prefix@
+ 
 -cd ${prefix}/share/xastir/Counties
 +mkdir -p /var/lib/xastir/Counties
 +cd /var/lib/xastir/Counties
  
  
  # Remove any old zip files hanging around in this directory
-diff --git a/scripts/get-NWSdata b/scripts/get-NWSdata
-index 7720afa..d2d98c7 100755
---- a/scripts/get-NWSdata
-+++ b/scripts/get-NWSdata
-@@ -56,7 +56,8 @@ FILE7="c_11au16"    # AWIPS County Libraries (under "States, Provinces & Countie
+diff --git a/scripts/get-NWSdata.in b/scripts/get-NWSdata.in
+index 2c0f344..cbe1855 100755
+--- a/scripts/get-NWSdata.in
++++ b/scripts/get-NWSdata.in
+@@ -60,7 +60,8 @@ FILE7="c_02ap19"    # RED: Counties, States, Provinces: U.S. Counties
  
- x=`dirname $0`
- . $x/values
--cd ${prefix}/share/xastir/Counties
+ prefix=@prefix@
+ 
+-cd ${prefix}/share/xastir/Counties || exit 1
 +mkdir -p /var/lib/xastir/Counties
 +cd /var/lib/xastir/Counties
  
  
  # Remove any old zip files hanging around in this directory
-diff --git a/scripts/get-fcc-rac.pl b/scripts/get-fcc-rac.pl
-index 544d563..d838c4f 100755
---- a/scripts/get-fcc-rac.pl
-+++ b/scripts/get-fcc-rac.pl
-@@ -27,7 +27,7 @@ use File::Basename;
- $dirname=dirname($0);
- require ($dirname."/values.pl");
+@@ -123,7 +124,7 @@ for d in $FILE1 $FILE2 $FILE3 $FILE4 $FILE5 $FILE6 $FILE7; do
+     echo
+     echo $e.dbf
+     # Run in a separate shell so we don't mess up the current directory for the -e test above
+-    (cd /usr/local/share/xastir; /usr/local/bin/testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
++    (cd /var/lib/xastir; testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
+  
+   fi
+ done
+diff --git a/scripts/get-fcc-rac.pl.in b/scripts/get-fcc-rac.pl.in
+index 5ca05ed..3ce0727 100755
+--- a/scripts/get-fcc-rac.pl.in
++++ b/scripts/get-fcc-rac.pl.in
+@@ -26,7 +26,7 @@
+ use File::Basename;
+ $prefix="@prefix@";
  
 -my $XASTIR_BASE="${prefix}/share/xastir";
 +my $XASTIR_BASE="/var/lib/xastir";
  
  
  # This script uses temporary storage space in /var/tmp to do its work.
-@@ -59,6 +59,7 @@ if (-e $file && -r $file && -f $file) {
+@@ -58,6 +58,7 @@ if (-e $file && -r $file && -f $file) {
    print STDERR "*** Installing the RAC database ***\n";
    print STDERR "***********************************\n";
    `unzip $file $file2`;
@@ -85,11 +92,11 @@ index 544d563..d838c4f 100755
    `mv $file2 $XASTIR_BASE/fcc/AMACALL.LST`;
  }
  
-diff --git a/scripts/get-gnis b/scripts/get-gnis
-index 2e21384..0937c66 100755
---- a/scripts/get-gnis
-+++ b/scripts/get-gnis
-@@ -57,10 +57,11 @@ do
+diff --git a/scripts/get-gnis.in b/scripts/get-gnis.in
+index 24c3e41..4160461 100755
+--- a/scripts/get-gnis.in
++++ b/scripts/get-gnis.in
+@@ -56,10 +56,11 @@ do
  
      if ( [ -f ${MYSTATE}${SUFFIX}.txt ] )
      then 
@@ -104,11 +111,11 @@ index 2e21384..0937c66 100755
  	fi
      else 
          printf "File for %s not successfully downloaded.\n" ${MYSTATE}
-diff --git a/scripts/get-pop b/scripts/get-pop
-index e0641f4..e98f0ef 100755
---- a/scripts/get-pop
-+++ b/scripts/get-pop
-@@ -61,14 +61,16 @@ do
+diff --git a/scripts/get-pop.in b/scripts/get-pop.in
+index fea04c0..90bf7a3 100755
+--- a/scripts/get-pop.in
++++ b/scripts/get-pop.in
+@@ -60,14 +60,16 @@ do
      fi
  
      if ( [ -f ${MYSTATE}${SUFFIX}.txt ] ) then 
@@ -130,39 +137,16 @@ index e0641f4..e98f0ef 100755
      else
          printf "File for %s not successfully downloaded.\n" ${MYSTATE}
      fi 
-diff --git a/scripts/xastir-fixcfg.sh b/scripts/xastir-fixcfg.sh
-index 2e6d5e9..1cb637b 100755
---- a/scripts/xastir-fixcfg.sh
-+++ b/scripts/xastir-fixcfg.sh
-@@ -18,7 +18,7 @@ if [ -f $CNF ]; then
- 	echo "$CNF: unable to rename!"
- 	exit 1
-     fi
--    sed -e 's:/usr/local/xastir/:${prefix}/share/xastir/:' <$CNF.backup >$CNF
-+    sed -e 's:/usr/local/xastir/:/var/lib/xastir/:' <$CNF.backup >$CNF
-     if [ $? -ne 0 ]; then
- 	echo "$CNF: sed failed!"
- 	mv $CNF.backup $CNF
-diff --git a/scripts/xastir-migrate.sh b/scripts/xastir-migrate.sh
-index a15aefb..fef6c11 100755
---- a/scripts/xastir-migrate.sh
-+++ b/scripts/xastir-migrate.sh
-@@ -9,7 +9,7 @@
- . `dirname $0`/values
- PREFIX=
- OLD=$PREFIX/usr/local/xastir
--NEW=$PREFIX${prefix}/share/xastir
-+NEW=$PREFIX/var/lib/xastir
- rr=0
- if [ -d $OLD ]; then
-         if [ ! -d $NEW ]; then
 diff --git a/src/xa_config.c b/src/xa_config.c
-index 085f914..97c7ff0 100644
+index bbab8cd..9b492ac 100644
 --- a/src/xa_config.c
 +++ b/src/xa_config.c
-@@ -429,6 +429,9 @@ char *get_user_base_dir(char *dir, char * base, size_t base_size) {
+@@ -427,8 +427,11 @@ char *get_user_base_dir(char *dir, char * base, size_t base_size) {
+ 
+ 
  char *get_data_base_dir(char *dir) {
-     static char base[MAX_VALUE];
+-    static char base[MAX_VALUE];
++    static char base[MAX_VALUE] = "";
      char *env_ptr;
 +    struct stat statbuf;
 +    char *paths[3];
@@ -175,9 +159,9 @@ index 085f914..97c7ff0 100644
      // -DXASTIR_DATA_BASE=\"/usr/local/share/xastir\"
      //
 -    xastir_snprintf(base,
--        sizeof(base),
--        "%s",
--        ((env_ptr = getenv ("XASTIR_DATA_BASE")) != NULL) ? env_ptr : XASTIR_DATA_BASE);
+-                    sizeof(base),
+-                    "%s",
+-                    ((env_ptr = getenv ("XASTIR_DATA_BASE")) != NULL) ? env_ptr : XASTIR_DATA_BASE);
 +    paths[0] = getenv ("XASTIR_DATA_BASE");
 +    paths[1] = XASTIR_STATELESS_BASE;
 +    paths[2] = XASTIR_DATA_BASE;
@@ -210,5 +194,5 @@ index 085f914..97c7ff0 100644
  }
  
 -- 
-2.18.0
+2.22.0
 

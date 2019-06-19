@@ -9,3 +9,4 @@ libm.so.6
 libpcre.so.1
 libpthread.so.0
 librt.so.1
+libshp.so.2
