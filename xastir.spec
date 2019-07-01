@@ -4,12 +4,12 @@
 #
 Name     : xastir
 Version  : 2.1.2
-Release  : 12
+Release  : 13
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.2.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.2.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
-License  : GPL-2.0 LGPL-2.0
+License  : BSD-3-Clause GPL-2.0 HPND ICU IJG JasPer-2.0 LGPL-2.0 LGPL-3.0 Libpng MIT MIT-Opengroup SGI-B-1.1 Sleepycat Zlib
 Requires: xastir-bin = %{version}-%{release}
 Requires: xastir-data = %{version}-%{release}
 Requires: xastir-license = %{version}-%{release}
@@ -20,6 +20,7 @@ BuildRequires : automake-dev
 BuildRequires : curl-dev
 BuildRequires : gettext-bin
 BuildRequires : intltool-dev
+BuildRequires : libgeotiff-dev
 BuildRequires : libtool
 BuildRequires : libtool-dev
 BuildRequires : m4
@@ -27,6 +28,8 @@ BuildRequires : motif-dev
 BuildRequires : pcre-dev
 BuildRequires : pkg-config-dev
 BuildRequires : pkgconfig(ice)
+BuildRequires : pkgconfig(libtiff-4)
+BuildRequires : pkgconfig(proj)
 BuildRequires : pkgconfig(shapelib)
 BuildRequires : pkgconfig(x11)
 BuildRequires : pkgconfig(xext)
@@ -92,7 +95,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1560976608
+export SOURCE_DATE_EPOCH=1562011165
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
@@ -109,12 +112,13 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1560976608
+export SOURCE_DATE_EPOCH=1562011165
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp COPYING %{buildroot}/usr/share/package-licenses/xastir/COPYING
 cp COPYING.LIB.LESSTIF %{buildroot}/usr/share/package-licenses/xastir/COPYING.LIB.LESSTIF
 cp Davis/COPYING %{buildroot}/usr/share/package-licenses/xastir/Davis_COPYING
+cp LICENSE %{buildroot}/usr/share/package-licenses/xastir/LICENSE
 cp LaCrosse/COPYING %{buildroot}/usr/share/package-licenses/xastir/LaCrosse_COPYING
 cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICENSE.geocoder
 %make_install
@@ -338,6 +342,7 @@ cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICEN
 /usr/share/package-licenses/xastir/COPYING
 /usr/share/package-licenses/xastir/COPYING.LIB.LESSTIF
 /usr/share/package-licenses/xastir/Davis_COPYING
+/usr/share/package-licenses/xastir/LICENSE
 /usr/share/package-licenses/xastir/LaCrosse_COPYING
 /usr/share/package-licenses/xastir/src_LICENSE.geocoder
 

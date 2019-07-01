@@ -1,5 +1,6 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
+libgeotiff-dev
 motif-dev
 curl-dev
 db-dev

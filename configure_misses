@@ -6,7 +6,6 @@ Configure miss: gpsman
 Configure miss: xfontsel
 Configure miss: main in -lcompat
 Configure miss: gettext in -lintl
-Configure miss: pj_init in -lproj
 Configure miss: ax25_config_load_ports in -lax25
 Configure miss: if db.h is exists and is usable
 Configure miss: GraphicsMagick-config
