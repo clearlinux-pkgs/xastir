@@ -1,6 +1,6 @@
-From d36c85d8cbe8e08c50021294098e910c73d36f4a Mon Sep 17 00:00:00 2001
+From 272a48adfe12926359c6f5876555608744869169 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
-Date: Wed, 19 Jun 2019 10:56:00 -0700
+Date: Wed, 17 Jul 2019 15:52:54 -0700
 Subject: [PATCH] Add stateless support in /var/lib/xastir
 
 Add search functionality to try, in order:
@@ -17,14 +17,14 @@ Update scripts that fetch public databases to store them under
  scripts/get-fcc-rac.pl.in |  3 ++-
  scripts/get-gnis.in       |  7 ++++---
  scripts/get-pop.in        | 12 +++++++-----
- src/xa_config.c           | 35 +++++++++++++++++++++++++++--------
- 7 files changed, 47 insertions(+), 21 deletions(-)
+ src/xa_config.c           | 39 +++++++++++++++++++++++++++++++--------
+ 7 files changed, 51 insertions(+), 21 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index e76adc3..b756b6e 100644
+index 168e358..4b61a37 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -661,7 +661,8 @@ if test "x${datadir}" = "x"; then
+@@ -638,7 +638,8 @@ if test "x${datadir}" = "x"; then
  else 
    CPPFLAGS="$CPPFLAGS -DXASTIR_DATA_BASE=\\\"${datadir}/xastir\\\""
  fi 
@@ -138,59 +138,65 @@ index fea04c0..90bf7a3 100755
          printf "File for %s not successfully downloaded.\n" ${MYSTATE}
      fi 
 diff --git a/src/xa_config.c b/src/xa_config.c
-index bbab8cd..9b492ac 100644
+index 9a6f1f3..1447983 100644
 --- a/src/xa_config.c
 +++ b/src/xa_config.c
-@@ -427,8 +427,11 @@ char *get_user_base_dir(char *dir, char * base, size_t base_size) {
+@@ -470,8 +470,11 @@ char *get_user_base_dir(char *dir, char * base, size_t base_size)
  
+ char *get_data_base_dir(char *dir)
+ {
+-  static char base[MAX_VALUE];
++  static char base[MAX_VALUE] = "";
+   char *env_ptr;
++  struct stat statbuf;
++  char *paths[3];
++  int path;
  
- char *get_data_base_dir(char *dir) {
--    static char base[MAX_VALUE];
-+    static char base[MAX_VALUE] = "";
-     char *env_ptr;
-+    struct stat statbuf;
-+    char *paths[3];
-+    int path;
+   // Snag this variable from the environment if it exists there,
+   // else grab it from the define from the compile command-line
+@@ -480,17 +483,37 @@ char *get_data_base_dir(char *dir)
+   // -DXASTIR_DATA_BASE=\"/opt/Xastir/share/xastir\"
+   // -DXASTIR_DATA_BASE=\"/usr/local/share/xastir\"
+   //
+-  xastir_snprintf(base,
+-                  sizeof(base),
+-                  "%s",
+-                  ((env_ptr = getenv ("XASTIR_DATA_BASE")) != NULL) ? env_ptr : XASTIR_DATA_BASE);
++  paths[0] = getenv ("XASTIR_DATA_BASE");
++  paths[1] = XASTIR_STATELESS_BASE;
++  paths[2] = XASTIR_DATA_BASE;
  
-     // Snag this variable from the environment if it exists there,
-     // else grab it from the define from the compile command-line
-@@ -437,15 +440,31 @@ char *get_data_base_dir(char *dir) {
-     // -DXASTIR_DATA_BASE=\"/opt/Xastir/share/xastir\"
-     // -DXASTIR_DATA_BASE=\"/usr/local/share/xastir\"
-     //
--    xastir_snprintf(base,
--                    sizeof(base),
--                    "%s",
--                    ((env_ptr = getenv ("XASTIR_DATA_BASE")) != NULL) ? env_ptr : XASTIR_DATA_BASE);
-+    paths[0] = getenv ("XASTIR_DATA_BASE");
-+    paths[1] = XASTIR_STATELESS_BASE;
-+    paths[2] = XASTIR_DATA_BASE;
- 
--    if (base[strlen (base) - 1] != '/')
--        strncat(base, "/", sizeof(base) - 1 - strlen(base));
-+    // Test paths for existing subdir
-+    for (path = 0; path < sizeof(paths)/sizeof(paths[0]); path++) {
-+        if (paths[path] == NULL)
-+            continue;
-+
-+        xastir_snprintf(base,
-+            sizeof(base),
-+            "%s",
-+            paths[path]);
-+
-+        if (base[strlen (base) - 1] != '/')
-+            strncat(base, "/", sizeof(base) - 1 - strlen(base));
-+
-+        strncat(base, dir, sizeof(base) - 1 - strlen(base));
-+
-+        if (stat(base, &statbuf) == 0) {
-+            // Just need to know it exists
-+            break;
-+        }
+-  if (base[strlen (base) - 1] != '/')
++  // Test paths for existing subdir
++  for (path = 0; path < sizeof(paths)/sizeof(paths[0]); path++)
+   {
+-    strncat(base, "/", sizeof(base) - 1 - strlen(base));
++    if (paths[path] == NULL)
++    {
++      continue;
 +    }
++
++    xastir_snprintf(base,
++        sizeof(base),
++        "%s",
++        paths[path]);
++
++    if (base[strlen (base) - 1] != '/')
++    {
++      strncat(base, "/", sizeof(base) - 1 - strlen(base));
++    }
++
++    strncat(base, dir, sizeof(base) - 1 - strlen(base));
++
++    if (stat(base, &statbuf) == 0)
++    {
++      // Just need to know it exists
++      break;
++    }
+   }
  
--    strncat(base, dir, sizeof(base) - 1 - strlen(base));
-     return base;
+-  strncat(base, dir, sizeof(base) - 1 - strlen(base));
+   return base;
  }
  
 -- 
