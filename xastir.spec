@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.4
-Release  : 14
+Release  : 15
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.4.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.4.tar.gz
 Summary  : No detailed summary available
@@ -19,6 +19,7 @@ BuildRequires : automake
 BuildRequires : automake-dev
 BuildRequires : curl-dev
 BuildRequires : gettext-bin
+BuildRequires : intltool-dev
 BuildRequires : libgeotiff-dev
 BuildRequires : libtool
 BuildRequires : libtool-dev
@@ -26,10 +27,12 @@ BuildRequires : m4
 BuildRequires : motif-dev
 BuildRequires : pcre-dev
 BuildRequires : pkg-config-dev
+BuildRequires : pkgconfig(ice)
 BuildRequires : pkgconfig(libtiff-4)
 BuildRequires : pkgconfig(proj)
 BuildRequires : pkgconfig(shapelib)
 BuildRequires : pkgconfig(x11)
+BuildRequires : pkgconfig(xext)
 BuildRequires : pkgconfig(xpm)
 BuildRequires : pkgconfig(xt)
 Patch1: 0001-Add-stateless-support-in-var-lib-xastir.patch
@@ -86,13 +89,19 @@ man components for the xastir package.
 %prep
 %setup -q -n Xastir-Release-2.1.4
 %patch1 -p1
+pushd ..
+cp -a Xastir-Release-2.1.4 buildavx2
+popd
+pushd ..
+cp -a Xastir-Release-2.1.4 buildavx512
+popd
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1563404770
+export SOURCE_DATE_EPOCH=1569966066
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$CFLAGS -fno-lto "
@@ -100,6 +109,22 @@ export FFLAGS="$CFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 %reconfigure --disable-static --without-imagemagick
 make  %{?_smp_mflags}
+unset PKG_CONFIG_PATH
+pushd ../buildavx2/
+export CFLAGS="$CFLAGS -m64 -march=haswell"
+export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
+export LDFLAGS="$LDFLAGS -m64 -march=haswell"
+%reconfigure --disable-static --without-imagemagick
+make  %{?_smp_mflags}
+popd
+unset PKG_CONFIG_PATH
+pushd ../buildavx512/
+export CFLAGS="$CFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
+export CXXFLAGS="$CXXFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
+export LDFLAGS="$LDFLAGS -m64 -march=skylake-avx512"
+%reconfigure --disable-static --without-imagemagick
+make  %{?_smp_mflags}
+popd
 
 %check
 export LANG=C.UTF-8
@@ -107,9 +132,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
+cd ../buildavx2;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+cd ../buildavx512;
+make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1563404770
+export SOURCE_DATE_EPOCH=1569966066
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp COPYING %{buildroot}/usr/share/package-licenses/xastir/COPYING
@@ -117,7 +146,12 @@ cp COPYING.LIB.LESSTIF %{buildroot}/usr/share/package-licenses/xastir/COPYING.LI
 cp Davis/COPYING %{buildroot}/usr/share/package-licenses/xastir/Davis_COPYING
 cp LICENSE %{buildroot}/usr/share/package-licenses/xastir/LICENSE
 cp LaCrosse/COPYING %{buildroot}/usr/share/package-licenses/xastir/LaCrosse_COPYING
-cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICENSE.geocoder
+pushd ../buildavx512/
+%make_install_avx512
+popd
+pushd ../buildavx2/
+%make_install_avx2
+popd
 %make_install
 
 %files
@@ -126,6 +160,14 @@ cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICEN
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/callpass
+/usr/bin/haswell/avx512_1/callpass
+/usr/bin/haswell/avx512_1/testdbfawk
+/usr/bin/haswell/avx512_1/xastir
+/usr/bin/haswell/avx512_1/xastir_udp_client
+/usr/bin/haswell/callpass
+/usr/bin/haswell/testdbfawk
+/usr/bin/haswell/xastir
+/usr/bin/haswell/xastir_udp_client
 /usr/bin/testdbfawk
 /usr/bin/xastir
 /usr/bin/xastir_udp_client
@@ -341,7 +383,6 @@ cp src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/src_LICEN
 /usr/share/package-licenses/xastir/Davis_COPYING
 /usr/share/package-licenses/xastir/LICENSE
 /usr/share/package-licenses/xastir/LaCrosse_COPYING
-/usr/share/package-licenses/xastir/src_LICENSE.geocoder
 
 %files man
 %defattr(0644,root,root,0755)
