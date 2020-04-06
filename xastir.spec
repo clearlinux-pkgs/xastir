@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.4
-Release  : 15
+Release  : 16
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.4.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.4.tar.gz
 Summary  : No detailed summary available
