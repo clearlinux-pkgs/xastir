@@ -1,9 +1,5 @@
-2.1.4
+2.1.6
 ImageMagick
-intltool-dev
 pcre-dev
-pkgconfig(ice)
 pkgconfig(x11)
-pkgconfig(xext)
 pkgconfig(xpm)
-pkgconfig(xt)

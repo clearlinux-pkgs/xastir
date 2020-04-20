@@ -1,4 +1,4 @@
-From 272a48adfe12926359c6f5876555608744869169 Mon Sep 17 00:00:00 2001
+From a13e5f3cfb92fe0c5954c4a89df498f8ba9f9a0b Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Wed, 17 Jul 2019 15:52:54 -0700
 Subject: [PATCH] Add stateless support in /var/lib/xastir
@@ -21,10 +21,10 @@ Update scripts that fetch public databases to store them under
  7 files changed, 51 insertions(+), 21 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 168e358..4b61a37 100644
+index d0e33fd..e7f93ae 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -638,7 +638,8 @@ if test "x${datadir}" = "x"; then
+@@ -634,7 +634,8 @@ if test "x${datadir}" = "x"; then
  else 
    CPPFLAGS="$CPPFLAGS -DXASTIR_DATA_BASE=\\\"${datadir}/xastir\\\""
  fi 
@@ -49,10 +49,10 @@ index 9605699..d66cff4 100755
  
  # Remove any old zip files hanging around in this directory
 diff --git a/scripts/get-NWSdata.in b/scripts/get-NWSdata.in
-index 2c0f344..cbe1855 100755
+index 70a8f51..708dc9f 100755
 --- a/scripts/get-NWSdata.in
 +++ b/scripts/get-NWSdata.in
-@@ -60,7 +60,8 @@ FILE7="c_02ap19"    # RED: Counties, States, Provinces: U.S. Counties
+@@ -60,7 +60,8 @@ FILE7="c_03mr20"    # RED: Counties, States, Provinces: U.S. Counties
  
  prefix=@prefix@
  
@@ -93,18 +93,18 @@ index 5ca05ed..3ce0727 100755
  }
  
 diff --git a/scripts/get-gnis.in b/scripts/get-gnis.in
-index 24c3e41..4160461 100755
+index d617ebf..bb40ed2 100755
 --- a/scripts/get-gnis.in
 +++ b/scripts/get-gnis.in
-@@ -56,10 +56,11 @@ do
+@@ -64,10 +64,11 @@ do
  
-     if ( [ -f ${MYSTATE}${SUFFIX}.txt ] )
+     if ( [ -f ${GNIS_FILE} ] )
      then 
 -        printf "File successfully downloaded. Moving to ${prefix}/share/xastir/GNIS\n" 
--        sudo mv ${MYSTATE}${SUFFIX}.txt ${prefix}/share/xastir/GNIS/${MYSTATE}.gnis
+-        sudo mv ${GNIS_FILE} ${prefix}/share/xastir/GNIS/${MYSTATE}.gnis
 +        printf "File successfully downloaded. Moving to /var/lib/xastir/GNIS\n" 
 +        sudo mkdir -p /var/lib/xastir/GNIS
-+        sudo mv ${MYSTATE}${SUFFIX}.txt /var/lib/xastir/GNIS/${MYSTATE}.gnis
++        sudo mv ${GNIS_FILE} /var/lib/xastir/GNIS/${MYSTATE}.gnis
  	if [ ${MYSTATE} = "AK" -o ${MYSTATE} = "HI" ]; then
 -		sudo recode utf16..utf8 ${prefix}/share/xastir/GNIS/${MYSTATE}.gnis
 +		sudo recode utf16..utf8 /var/lib/xastir/GNIS/${MYSTATE}.gnis
@@ -138,7 +138,7 @@ index fea04c0..90bf7a3 100755
          printf "File for %s not successfully downloaded.\n" ${MYSTATE}
      fi 
 diff --git a/src/xa_config.c b/src/xa_config.c
-index 9a6f1f3..1447983 100644
+index 2ded26c..926749d 100644
 --- a/src/xa_config.c
 +++ b/src/xa_config.c
 @@ -470,8 +470,11 @@ char *get_user_base_dir(char *dir, char * base, size_t base_size)
@@ -200,5 +200,5 @@ index 9a6f1f3..1447983 100644
  }
  
 -- 
-2.22.0
+2.26.1
 
