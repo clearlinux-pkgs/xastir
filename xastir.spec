@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.6
-Release  : 17
+Release  : 18
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Summary  : No detailed summary available
@@ -98,7 +98,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1587402969
+export SOURCE_DATE_EPOCH=1588615723
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -139,7 +139,7 @@ cd ../buildavx512;
 make VERBOSE=1 V=1 %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1587402969
+export SOURCE_DATE_EPOCH=1588615723
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp %{_builddir}/Xastir-Release-2.1.6/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
