@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.6
-Release  : 18
+Release  : 19
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Summary  : No detailed summary available
@@ -31,6 +31,7 @@ BuildRequires : pkgconfig(proj)
 BuildRequires : pkgconfig(shapelib)
 BuildRequires : pkgconfig(x11)
 BuildRequires : pkgconfig(xpm)
+BuildRequires : pkgconfig(xt)
 Patch1: 0001-Add-stateless-support-in-var-lib-xastir.patch
 
 %description
@@ -98,7 +99,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1588615723
+export SOURCE_DATE_EPOCH=1614622751
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -132,20 +133,21 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 cd ../buildavx2;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 cd ../buildavx512;
-make VERBOSE=1 V=1 %{?_smp_mflags} check || :
+make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1588615723
+export SOURCE_DATE_EPOCH=1614622751
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp %{_builddir}/Xastir-Release-2.1.6/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
 cp %{_builddir}/Xastir-Release-2.1.6/COPYING.LIB.LESSTIF %{buildroot}/usr/share/package-licenses/xastir/5fb362ef1680e635fe5fb212b55eef4db9ead48f
 cp %{_builddir}/Xastir-Release-2.1.6/Davis/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
 cp %{_builddir}/Xastir-Release-2.1.6/LaCrosse/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
+cp %{_builddir}/Xastir-Release-2.1.6/src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/963def3115497942492836e7a36d48b95f5a5fda
 pushd ../buildavx512/
 %make_install_avx512
 popd
@@ -382,6 +384,7 @@ popd
 %defattr(0644,root,root,0755)
 /usr/share/package-licenses/xastir/5fb362ef1680e635fe5fb212b55eef4db9ead48f
 /usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
+/usr/share/package-licenses/xastir/963def3115497942492836e7a36d48b95f5a5fda
 
 %files man
 %defattr(0644,root,root,0755)
