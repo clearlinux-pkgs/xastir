@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.6
-Release  : 19
+Release  : 20
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Summary  : No detailed summary available
