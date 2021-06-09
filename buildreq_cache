@@ -1,5 +1,6 @@
 2.1.6
 ImageMagick
 pcre-dev
+pkgconfig(MagickCore-7.Q16HDRI)
 pkgconfig(x11)
 pkgconfig(xpm)

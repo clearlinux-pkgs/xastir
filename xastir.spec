@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.6
-Release  : 21
+Release  : 22
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Summary  : No detailed summary available
@@ -26,6 +26,7 @@ BuildRequires : m4
 BuildRequires : motif-dev
 BuildRequires : pcre-dev
 BuildRequires : pkg-config-dev
+BuildRequires : pkgconfig(MagickCore-7.Q16HDRI)
 BuildRequires : pkgconfig(libtiff-4)
 BuildRequires : pkgconfig(proj)
 BuildRequires : pkgconfig(shapelib)
@@ -101,13 +102,13 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1614811509
+export SOURCE_DATE_EPOCH=1623198591
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
 export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
-%reconfigure --disable-static --without-imagemagick
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 unset PKG_CONFIG_PATH
 pushd ../buildavx2/
@@ -116,7 +117,7 @@ export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
 export FFLAGS="$FFLAGS -m64 -march=haswell"
 export FCFLAGS="$FCFLAGS -m64 -march=haswell"
 export LDFLAGS="$LDFLAGS -m64 -march=haswell"
-%reconfigure --disable-static --without-imagemagick
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 popd
 unset PKG_CONFIG_PATH
@@ -126,7 +127,7 @@ export CXXFLAGS="$CXXFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
 export FFLAGS="$FFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
 export FCFLAGS="$FCFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
 export LDFLAGS="$LDFLAGS -m64 -march=skylake-avx512"
-%reconfigure --disable-static --without-imagemagick
+%reconfigure --disable-static
 make  %{?_smp_mflags}
 popd
 
@@ -142,7 +143,7 @@ cd ../buildavx512;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1614811509
+export SOURCE_DATE_EPOCH=1623198591
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp %{_builddir}/Xastir-Release-2.1.6/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4

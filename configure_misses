@@ -1,33 +1,36 @@
-Configure miss: gm
-Configure miss: /usr/bin/gm.exe
 Configure miss: /usr/bin/convert.exe
-Configure miss: festival
-Configure miss: gpsman
-Configure miss: xfontsel
-Configure miss: main in -lcompat
-Configure miss: gcc options needed to detect all undeclared functions
-Configure miss: ax25_config_load_ports in -lax25
-Configure miss: if db.h is exists and is usable
-Configure miss: GraphicsMagick-config
-Configure miss: gm
-Configure miss: /usr/bin/gm.exe
 Configure miss: /usr/bin/convert.exe
-Configure miss: festival
-Configure miss: gpsman
-Configure miss: xfontsel
-Configure miss: main in -lcompat
-Configure miss: gcc options needed to detect all undeclared functions
-Configure miss: ax25_config_load_ports in -lax25
-Configure miss: if db.h is exists and is usable
-Configure miss: GraphicsMagick-config
-Configure miss: gm
-Configure miss: /usr/bin/gm.exe
 Configure miss: /usr/bin/convert.exe
-Configure miss: festival
-Configure miss: gpsman
-Configure miss: xfontsel
-Configure miss: main in -lcompat
-Configure miss: gcc options needed to detect all undeclared functions
-Configure miss: ax25_config_load_ports in -lax25
-Configure miss: if db.h is exists and is usable
+Configure miss: /usr/bin/gm.exe
+Configure miss: /usr/bin/gm.exe
+Configure miss: /usr/bin/gm.exe
 Configure miss: GraphicsMagick-config
+Configure miss: GraphicsMagick-config
+Configure miss: GraphicsMagick-config
+Configure miss: ax25_config_load_ports in -lax25
+Configure miss: ax25_config_load_ports in -lax25
+Configure miss: ax25_config_load_ports in -lax25
+Configure miss: festival
+Configure miss: festival
+Configure miss: festival
+Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: gcc options needed to detect all undeclared functions
+Configure miss: gm
+Configure miss: gm
+Configure miss: gm
+Configure miss: gpsman
+Configure miss: gpsman
+Configure miss: gpsman
+Configure miss: if db.h is exists and is usable
+Configure miss: if db.h is exists and is usable
+Configure miss: if db.h is exists and is usable
+Configure miss: if your ImageMagick is old enough for us to use
+Configure miss: if your ImageMagick is old enough for us to use
+Configure miss: if your ImageMagick is old enough for us to use
+Configure miss: main in -lcompat
+Configure miss: main in -lcompat
+Configure miss: main in -lcompat
+Configure miss: xfontsel
+Configure miss: xfontsel
+Configure miss: xfontsel
