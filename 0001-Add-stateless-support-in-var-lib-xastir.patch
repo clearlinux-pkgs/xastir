@@ -1,4 +1,4 @@
-From a13e5f3cfb92fe0c5954c4a89df498f8ba9f9a0b Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: "Brett T. Warden" <brett.t.warden@intel.com>
 Date: Wed, 17 Jul 2019 15:52:54 -0700
 Subject: [PATCH] Add stateless support in /var/lib/xastir
@@ -199,6 +199,3 @@ index 2ded26c..926749d 100644
    return base;
  }
  
--- 
-2.26.1
-

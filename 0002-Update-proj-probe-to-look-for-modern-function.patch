@@ -1,4 +1,4 @@
-From 6ee6348ca9ad8556e48d26d976f5d6709e8e31cb Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Tom Russo <russo@bogodyn.org>
 Date: Wed, 3 Mar 2021 10:34:50 -0700
 Subject: [PATCH] Update proj probe to look for modern function
@@ -37,7 +37,7 @@ Closes #173
  1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index b85f0356..9931591b 100644
+index e7f93ae..cb3e3bf 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -353,14 +353,18 @@ AC_CHECK_FUNCS([strndup])

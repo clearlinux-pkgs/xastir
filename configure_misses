@@ -31,6 +31,9 @@ Configure miss: if your ImageMagick is old enough for us to use
 Configure miss: main in -lcompat
 Configure miss: main in -lcompat
 Configure miss: main in -lcompat
+Configure miss: pthread_mutexattr_setkind_np
+Configure miss: pthread_mutexattr_setkind_np
+Configure miss: pthread_mutexattr_setkind_np
 Configure miss: xfontsel
 Configure miss: xfontsel
 Configure miss: xfontsel

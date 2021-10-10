@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.6
-Release  : 22
+Release  : 23
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.6/Xastir-2.1.6.tar.gz
 Summary  : No detailed summary available
@@ -12,6 +12,7 @@ Group    : Development/Tools
 License  : GPL-2.0 LGPL-2.0
 Requires: xastir-bin = %{version}-%{release}
 Requires: xastir-data = %{version}-%{release}
+Requires: xastir-filemap = %{version}-%{release}
 Requires: xastir-license = %{version}-%{release}
 Requires: xastir-man = %{version}-%{release}
 BuildRequires : ImageMagick
@@ -35,6 +36,7 @@ BuildRequires : pkgconfig(xpm)
 BuildRequires : pkgconfig(xt)
 Patch1: 0001-Add-stateless-support-in-var-lib-xastir.patch
 Patch2: 0002-Update-proj-probe-to-look-for-modern-function.patch
+Patch3: 0003-Fix-build-with-automake-1.16.5.patch
 
 %description
 ------------------------------------------------------------------------
@@ -47,6 +49,7 @@ Summary: bin components for the xastir package.
 Group: Binaries
 Requires: xastir-data = %{version}-%{release}
 Requires: xastir-license = %{version}-%{release}
+Requires: xastir-filemap = %{version}-%{release}
 
 %description bin
 bin components for the xastir package.
@@ -67,6 +70,14 @@ Requires: xastir-man = %{version}-%{release}
 
 %description doc
 doc components for the xastir package.
+
+
+%package filemap
+Summary: filemap components for the xastir package.
+Group: Default
+
+%description filemap
+filemap components for the xastir package.
 
 
 %package license
@@ -90,6 +101,7 @@ man components for the xastir package.
 cd %{_builddir}/Xastir-Release-2.1.6
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 pushd ..
 cp -a Xastir-Release-2.1.6 buildavx2
 popd
@@ -102,7 +114,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1623198591
+export SOURCE_DATE_EPOCH=1633847808
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -112,21 +124,21 @@ export CXXFLAGS="$CXXFLAGS -fno-lto "
 make  %{?_smp_mflags}
 unset PKG_CONFIG_PATH
 pushd ../buildavx2/
-export CFLAGS="$CFLAGS -m64 -march=haswell"
-export CXXFLAGS="$CXXFLAGS -m64 -march=haswell"
-export FFLAGS="$FFLAGS -m64 -march=haswell"
-export FCFLAGS="$FCFLAGS -m64 -march=haswell"
-export LDFLAGS="$LDFLAGS -m64 -march=haswell"
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v3"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v3"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v3"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v3"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v3"
 %reconfigure --disable-static
 make  %{?_smp_mflags}
 popd
 unset PKG_CONFIG_PATH
 pushd ../buildavx512/
-export CFLAGS="$CFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
-export CXXFLAGS="$CXXFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
-export FFLAGS="$FFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
-export FCFLAGS="$FCFLAGS -m64 -march=skylake-avx512 -mprefer-vector-width=512"
-export LDFLAGS="$LDFLAGS -m64 -march=skylake-avx512"
+export CFLAGS="$CFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
+export CXXFLAGS="$CXXFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
+export FFLAGS="$FFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
+export FCFLAGS="$FCFLAGS -m64 -march=x86-64-v4 -mprefer-vector-width=256"
+export LDFLAGS="$LDFLAGS -m64 -march=x86-64-v4"
 %reconfigure --disable-static
 make  %{?_smp_mflags}
 popd
@@ -143,7 +155,7 @@ cd ../buildavx512;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1623198591
+export SOURCE_DATE_EPOCH=1633847808
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp %{_builddir}/Xastir-Release-2.1.6/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
@@ -151,11 +163,13 @@ cp %{_builddir}/Xastir-Release-2.1.6/COPYING.LIB.LESSTIF %{buildroot}/usr/share/
 cp %{_builddir}/Xastir-Release-2.1.6/Davis/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
 cp %{_builddir}/Xastir-Release-2.1.6/LaCrosse/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
 cp %{_builddir}/Xastir-Release-2.1.6/src/LICENSE.geocoder %{buildroot}/usr/share/package-licenses/xastir/963def3115497942492836e7a36d48b95f5a5fda
-pushd ../buildavx512/
-%make_install_avx512
-popd
 pushd ../buildavx2/
-%make_install_avx2
+%make_install_v3
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+popd
+pushd ../buildavx512/
+%make_install_v4
+/usr/bin/elf-move.py avx512 %{buildroot}-v4 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 popd
 %make_install
 
@@ -165,17 +179,10 @@ popd
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/callpass
-/usr/bin/haswell/avx512_1/callpass
-/usr/bin/haswell/avx512_1/testdbfawk
-/usr/bin/haswell/avx512_1/xastir
-/usr/bin/haswell/avx512_1/xastir_udp_client
-/usr/bin/haswell/callpass
-/usr/bin/haswell/testdbfawk
-/usr/bin/haswell/xastir
-/usr/bin/haswell/xastir_udp_client
 /usr/bin/testdbfawk
 /usr/bin/xastir
 /usr/bin/xastir_udp_client
+/usr/share/clear/optimized-elf/bin*
 
 %files data
 %defattr(-,root,root,-)
@@ -382,6 +389,10 @@ popd
 %files doc
 %defattr(0644,root,root,0755)
 %doc /usr/share/doc/xastir/*
+
+%files filemap
+%defattr(-,root,root,-)
+/usr/share/clear/filemap/filemap-xastir
 
 %files license
 %defattr(0644,root,root,0755)
