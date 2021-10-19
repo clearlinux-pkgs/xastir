@@ -66,8 +66,8 @@ index 70a8f51..708dc9f 100755
      echo
      echo $e.dbf
      # Run in a separate shell so we don't mess up the current directory for the -e test above
--    (cd /usr/local/share/xastir; /usr/local/bin/testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
-+    (cd /var/lib/xastir; testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
+-    (cd ${prefix}/share/xastir; ${prefix}/bin/testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
++    (cd /var/lib/xastir; ${prefix}/bin/testdbfawk -D config -d Counties/$e.dbf 2>&1 | head -3 | tail -1)
   
    fi
  done
