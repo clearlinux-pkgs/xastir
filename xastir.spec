@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.8
-Release  : 27
+Release  : 28
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.8/Xastir-2.1.8.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.8/Xastir-2.1.8.tar.gz
 Summary  : No detailed summary available
@@ -109,7 +109,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1634676680
+export SOURCE_DATE_EPOCH=1656343293
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
@@ -150,7 +150,7 @@ cd ../buildavx512;
 make %{?_smp_mflags} check || :
 
 %install
-export SOURCE_DATE_EPOCH=1634676680
+export SOURCE_DATE_EPOCH=1656343293
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/xastir
 cp %{_builddir}/Xastir-Release-2.1.8/COPYING %{buildroot}/usr/share/package-licenses/xastir/74a8a6531a42e124df07ab5599aad63870fa0bd4
@@ -165,8 +165,8 @@ pushd ../buildavx512/
 %make_install_v4
 popd
 %make_install
-/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
-/usr/bin/elf-move.py avx512 %{buildroot}-v4 %{buildroot}/usr/share/clear/optimized-elf/ %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+/usr/bin/elf-move.py avx2 %{buildroot}-v3 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
+/usr/bin/elf-move.py avx512 %{buildroot}-v4 %{buildroot} %{buildroot}/usr/share/clear/filemap/filemap-%{name}
 
 %files
 %defattr(-,root,root,-)
