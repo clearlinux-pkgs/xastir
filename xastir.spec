@@ -4,7 +4,7 @@
 #
 Name     : xastir
 Version  : 2.1.8
-Release  : 30
+Release  : 31
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.1.8/Xastir-2.1.8.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.1.8/Xastir-2.1.8.tar.gz
 Summary  : No detailed summary available
