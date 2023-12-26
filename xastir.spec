@@ -5,7 +5,7 @@
 #
 Name     : xastir
 Version  : 2.2.0
-Release  : 38
+Release  : 39
 URL      : https://github.com/Xastir/Xastir/archive/Release-2.2.0/Xastir-2.2.0.tar.gz
 Source0  : https://github.com/Xastir/Xastir/archive/Release-2.2.0/Xastir-2.2.0.tar.gz
 Summary  : No detailed summary available
